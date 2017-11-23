@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图</title>
+	<style>
+		*{
+			padding: 0px;
+			margin: 0px;
+		}
+		.lunbotu{
+			width: 500px;
+			height: 210px;
+			border: 2px solid #000;
+			background-color:#ddd;
+		}
+		.lunbotu img{
+			display: block;
+		}
+		.jiaodian{
+			width:100%;
+			height: 20px;
+			text-align: center;
+			padding: 5px 0px;
+		}
+		.jiaodian li{
+			display: inline-block;
+			width: 18px; 
+			height: 18px;
+			border: 1px solid #000;
+			line-height: 18px;
+			text-align: center;
+			margin-right: 10px;		
+		}
+		.jiaodian li:last-of-type{
+			margin-right: 0px;
+		}
+		.jiaodian li{
+			cursor: pointer;
+		}
+		.lunbotu{
+			position: relative;
+		}
+		.lunbotu span{
+			display: inline-block;
+			width:50px;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			font-size: 30px;
+			background-color: rgba(0,0,0,0.5);
+			color: #fff;
+			position: absolute;
+			top:70px;
+			cursor: pointer;
+		}
+		.lunbotu .left{
+			left:20px;
+		}
+		.lunbotu .right{
+			right: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="lunbotu">
+		<img src="" alt="">
+		<span class="left"><</span>
+		<span class="right">></span>
+		<ul class="jiaodian">
+		</ul>
+	</div>
+	<script>
+		//元素的获取
+		var lunbotu=document.getElementsByClassName('lunbotu')[0];
+		var left=lunbotu.getElementsByClassName('left')[0];
+		var right=lunbotu.getElementsByClassName('right')[0];
+		var img=lunbotu.getElementsByTagName('img')[0];
+		var ul=document.getElementsByClassName('jiaodian')[0];
+		var arr=["./images/dd_scroll_1.jpg","./images/dd_scroll_2.jpg","./images/dd_scroll_3.jpg","./images/dd_scroll_4.jpg","./images/dd_scroll_5.jpg"];
+		//图片数组的长度
+		var len=arr.length;
+		//动态追加li
+		var li_str='';
+		for(var i=0;i<len;i++){
+			li_str+='<li>'+(i+1)+'</li>';
+		}
+		ul.innerHTML=li_str;
+		//获取li
+		var lis=ul.getElementsByTagName('li');
+		//当前图片的索引
+		var curindex=0;
+
+
+		//轮播的方法
+		function lunbo(){
+			console.log('在执行');
+			if(curindex==len){
+				curindex=0;
+			}
+			//清除所有的li背景
+			for(var j=0;j<len;j++){
+				lis[j].style.backgroundColor='';
+			}
+			//给当前的li加背景
+			lis[curindex].style.backgroundColor='#f00';
+			img.src=arr[curindex];
+			curindex++;
+		}
+		//解决定时器延迟的问题
+		lunbo();
+		//空字符串是能够开启的状态
+		var dingshiqi='';
+		function kaiqi(){
+			if(dingshiqi==''){
+				dingshiqi=setInterval('lunbo()',1000);
+			}else{
+				return;
+			}
+		}
+		kaiqi();
+		//鼠标放上暂停定时器
+		img.onmouseover=function(){
+			clearInterval(dingshiqi);
+			dingshiqi='';
+		}
+		//鼠标移开停止
+		img.onmouseout=function(){
+			kaiqi();
+			//dingshiqi=setInterval('lunbo()',1000);
+		}
+		//点击相应的焦点  切换到指定的图片上
+		for(var t=0;t<len;t++){
+			//先保存t
+			lis[t].index=t;
+			lis[t].onmouseover=function(){
+				//清除定时器
+				clearInterval(dingshiqi);
+				dingshiqi='';
+				//5秒后再开起定时器
+				setTimeout("kaiqi()",3000);
+				//切换到对应的图片
+				curindex=this.index;
+				lunbo();
+			}
+		}
+		//点击向下 轮播一个图片
+		right.onclick=function(){
+			lunbo();
+		}
+		//点击向上轮播一个图片	
+		left.onclick=function(){
+			clearInterval(dingshiqi);
+			dingshiqi='';
+			if(curindex==1){
+				curindex=len-1;
+			}else{
+			curindex=curindex-2;
+			}
+			lunbo();
+		}  	
+	</script>
+</body>
+</html>

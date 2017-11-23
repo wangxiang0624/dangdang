@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>tab切换</title>
+	<style>
+		.tabs{
+
+		}
+		.tabs span{
+			display: inline-block;
+			width:70px;
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			background-color: #ddd;
+			color: #fff;
+			cursor: pointer;
+
+		}
+		.tabs .cur{
+			background-color: #000;
+		}
+		.contents{
+			width: 300px;
+			height: 200px;
+			border: 2px solid #000;
+		}
+		.contents .content{
+			width: 300px;
+			height: 200px;
+			display: none;
+		}
+		.contents .content:nth-of-type(1){
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div class="tabs">
+		<span class="cur">历史</span>
+		<span>语文</span>
+		<span>数学</span>
+		<span>英语</span>
+		<div class="contents">
+			<div class="content">历史的内容。。。。。。。。。。。。。。。。。</div>
+			<div class="content">语文的内容。。。。。。。。。。。。。。。。。</div>
+			<div class="content">数学的内容。。。。。。。。。。。。。。。。。</div>
+			<div class="content">英语的内容。。。。。。。。。。。。。。。。。</div>
+		</div>
+	</div>
+	<script>
+		var spans=document.getElementsByClassName('tabs')[0].getElementsByTagName('span');
+		console.log(spans);
+		var content=document.getElementsByClassName('content');
+		var len=spans.length;
+		for(var i=0;i<len;i++){
+			//保存索引
+			spans[i].index=i;
+			spans[i].onclick=function(){
+				for(var t=0;t<len;t++){
+					spans[t].className='';
+					content[t].style.display='none';
+				}
+				this.className='cur';
+				//显示当前的content
+				content[this.index].style.display='block';
+
+			}
+		}
+	</script>
+</body>
+</html>
